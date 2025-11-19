@@ -104,7 +104,7 @@ export function ChatWidget() {
           <div className="bg-primary text-primary-foreground p-4 rounded-t-lg">
             <h3 className="font-semibold">Chat with AI Assistant</h3>
             <p className="text-sm opacity-90">
-              Ask any questions about Atheles
+              Ask any questions about Athletes
             </p>
           </div>
 
