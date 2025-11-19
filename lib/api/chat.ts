@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://techrun-athech-server.onrender.com/api";
 
 export async function sendMessage(message: string): Promise<string> {
   try {
