@@ -37,7 +37,7 @@ export const translations = {
     simplePricing: "Simple, Transparent Pricing",
     readyToTransform: "Ready to Transform Your Team Management?",
     joinHundreds:
-      "Join hundreds of teams already using AthleteTrack to streamline their operations and improve athlete management.",
+      "Join hundreds of teams already using Athech to streamline their operations and improve athlete management.",
 
     // Dashboard
     welcome: "Welcome",
@@ -125,7 +125,7 @@ export const translations = {
     alertManagement: "Gestión de Alertas",
     realtimeNotifications:
       "Notificaciones en tiempo real y seguimiento de alertas",
-    whyChoose: "¿Por qué elegir AthleteTrack?",
+    whyChoose: "¿Por qué elegir Athech?",
     realtimeVerification: "Verificación en Tiempo Real",
     instantVerify:
       "Verifique instantáneamente el paradero del atleta con seguimiento de ubicación integrado y envíos de fotos.",
@@ -141,7 +141,7 @@ export const translations = {
     simplePricing: "Precios Simples y Transparentes",
     readyToTransform: "¿Listo para Transformar la Gestión de su Equipo?",
     joinHundreds:
-      "Únase a cientos de equipos que ya utilizan AthleteTrack para optimizar sus operaciones y mejorar la gestión de atletas.",
+      "Únase a cientos de equipos que ya utilizan Athech para optimizar sus operaciones y mejorar la gestión de atletas.",
 
     // Dashboard
     welcome: "Bienvenido",
@@ -228,7 +228,7 @@ export const translations = {
       "Rôles d'administrateur, entraîneur, athlète, médecin et nutritionniste",
     alertManagement: "Gestion des Alertes",
     realtimeNotifications: "Notifications en temps réel et suivi des alertes",
-    whyChoose: "Pourquoi Choisir AthleteTrack?",
+    whyChoose: "Pourquoi Choisir Athech?",
     realtimeVerification: "Vérification en Temps Réel",
     instantVerify:
       "Vérifiez instantanément la localisation des athlètes avec suivi de localisation intégré et soumissions photo.",
@@ -244,7 +244,7 @@ export const translations = {
     simplePricing: "Tarification Simple et Transparente",
     readyToTransform: "Prêt à Transformer la Gestion de votre Équipe?",
     joinHundreds:
-      "Rejoignez des centaines d'équipes qui utilisent déjà AthleteTrack pour optimiser leurs opérations et améliorer la gestion des athlètes.",
+      "Rejoignez des centaines d'équipes qui utilisent déjà Athech pour optimiser leurs opérations et améliorer la gestion des athlètes.",
 
     // Dashboard
     welcome: "Bienvenue",
@@ -332,7 +332,7 @@ export const translations = {
       "Wajibu wa Msimamizi, Kocha, Mnariadha, Mganga, na Mgeni wa Chakula",
     alertManagement: "Usimamizi wa Tahadhari",
     realtimeNotifications: "Arifa ya mara kwa mara na kufuatilia tahadhari",
-    whyChoose: "Kwa Nini Chagua AthleteTrack?",
+    whyChoose: "Kwa Nini Chagua Athech?",
     realtimeVerification: "Uthibitisho wa Wakati Halisi",
     instantVerify:
       "Thibitisha mahali pa mnariadha mara moja na kufuatilia mahali na kuwasilisha picha.",
@@ -348,7 +348,7 @@ export const translations = {
     simplePricing: "Bei Rahisi na Wazi",
     readyToTransform: "Je, Uko Tayari Kubadilisha Usimamizi wa Timu?",
     joinHundreds:
-      "Jiunge na mamia ya timu zinazotumia AthleteTrack tayari kuboresha utendaji wao na kuboresha usimamizi wa wanariadha.",
+      "Jiunge na mamia ya timu zinazotumia Athech tayari kuboresha utendaji wao na kuboresha usimamizi wa wanariadha.",
 
     // Dashboard
     welcome: "Karibu",
