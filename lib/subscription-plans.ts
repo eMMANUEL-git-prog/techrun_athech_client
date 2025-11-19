@@ -1,0 +1,212 @@
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  price: number;
+  currency: string;
+  period: string;
+  features: string[];
+  highlighted: boolean;
+  role: "athlete" | "coach" | "medic" | "nutritionist";
+}
+
+export const subscriptionPlans: SubscriptionPlan[] = [
+  {
+    id: "athlete-free",
+    name: "Free",
+    price: 0,
+    currency: "KES",
+    period: "/month",
+    role: "athlete",
+    highlighted: false,
+    features: [
+      "Basic whereabouts tracking",
+      "Alert notifications",
+      "Basic profile",
+      "Limited reports",
+    ],
+  },
+  {
+    id: "athlete-pro",
+    name: "Pro",
+    price: 290,
+    currency: "KES",
+    period: "/month",
+    role: "athlete",
+    highlighted: true,
+    features: [
+      "All Free features",
+      "AI Calorie Calculator",
+      "Medication Tracker",
+      "Doping & Anti-Doping Guidelines",
+      "Advanced reports",
+      "Priority support",
+    ],
+  },
+  {
+    id: "athlete-premium",
+    name: "Premium",
+    price: 590,
+    currency: "KES",
+    period: "/month",
+    role: "athlete",
+    highlighted: false,
+    features: [
+      "All Pro features",
+      "Nutrition Planner (AI)",
+      "Recovery Guide (AI)",
+      "Performance Analysis",
+      "Unlimited reports",
+      "Dedicated support",
+      "Custom recommendations",
+    ],
+  },
+  {
+    id: "coach-free",
+    name: "Free",
+    price: 0,
+    currency: "KES",
+    period: "/month",
+    role: "coach",
+    highlighted: false,
+    features: [
+      "Manage up to 5 athletes",
+      "Basic team tracking",
+      "Alert system",
+      "Limited analytics",
+    ],
+  },
+  {
+    id: "coach-pro",
+    name: "Pro",
+    price: 490,
+    currency: "KES",
+    period: "/month",
+    role: "coach",
+    highlighted: true,
+    features: [
+      "All Free features",
+      "Manage unlimited athletes",
+      "Team performance analytics",
+      "Advanced reporting",
+      "Custom dashboards",
+      "Priority support",
+    ],
+  },
+  {
+    id: "coach-premium",
+    name: "Premium",
+    price: 990,
+    currency: "KES",
+    period: "/month",
+    role: "coach",
+    highlighted: false,
+    features: [
+      "All Pro features",
+      "AI-powered insights",
+      "Team health monitoring",
+      "Predictive analytics",
+      "API access",
+      "Dedicated support",
+    ],
+  },
+  {
+    id: "medic-free",
+    name: "Free",
+    price: 0,
+    currency: "KES",
+    period: "/month",
+    role: "medic",
+    highlighted: false,
+    features: [
+      "Medical alerts",
+      "Basic patient tracking",
+      "Medical history logs",
+      "Limited consultations",
+    ],
+  },
+  {
+    id: "medic-pro",
+    name: "Pro",
+    price: 390,
+    currency: "KES",
+    period: "/month",
+    role: "medic",
+    highlighted: true,
+    features: [
+      "All Free features",
+      "Unlimited patient records",
+      "Medication tracker",
+      "Treatment plans",
+      "Advanced analytics",
+    ],
+  },
+  {
+    id: "medic-premium",
+    name: "Premium",
+    price: 790,
+    currency: "KES",
+    period: "/month",
+    role: "medic",
+    highlighted: false,
+    features: [
+      "All Pro features",
+      "AI health predictions",
+      "Telemedicine support",
+      "Emergency protocols",
+      "Dedicated support",
+    ],
+  },
+  {
+    id: "nutritionist-free",
+    name: "Free",
+    price: 0,
+    currency: "KES",
+    period: "/month",
+    role: "nutritionist",
+    highlighted: false,
+    features: [
+      "Basic meal planning",
+      "Limited client access",
+      "Nutrition logs",
+      "Basic recommendations",
+    ],
+  },
+  {
+    id: "nutritionist-pro",
+    name: "Pro",
+    price: 340,
+    currency: "KES",
+    period: "/month",
+    role: "nutritionist",
+    highlighted: true,
+    features: [
+      "All Free features",
+      "Unlimited clients",
+      "Advanced meal planning",
+      "Calorie tracking",
+      "Supplement recommendations",
+      "Priority support",
+    ],
+  },
+  {
+    id: "nutritionist-premium",
+    name: "Premium",
+    price: 690,
+    currency: "KES",
+    period: "/month",
+    role: "nutritionist",
+    highlighted: false,
+    features: [
+      "All Pro features",
+      "AI-powered nutrition",
+      "Allergy management",
+      "Performance nutrition",
+      "Research access",
+      "Dedicated support",
+    ],
+  },
+];
+
+export const getPlansByRole = (role: string) => {
+  return subscriptionPlans.filter((plan) => plan.role === role);
+};

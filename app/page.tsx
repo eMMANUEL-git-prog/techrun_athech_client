@@ -295,15 +295,18 @@ export default function LandingPage() {
                       </li>
                     ))}
                   </ul>
-                  <button
-                    className={`w-full py-2 px-4 rounded-lg font-medium transition-opacity hover:opacity-90 ${
-                      plan.highlighted
-                        ? "bg-primary-foreground text-primary"
-                        : "bg-primary text-primary-foreground"
-                    }`}
-                  >
-                    {t("startFreeTrial")}
-                  </button>
+                  <Link href="/login">
+                    {" "}
+                    <button
+                      className={`w-full py-2 px-4 rounded-lg font-medium transition-opacity hover:opacity-90 ${
+                        plan.highlighted
+                          ? "bg-primary-foreground text-primary"
+                          : "bg-primary text-primary-foreground"
+                      }`}
+                    >
+                      {t("startFreeTrial")}
+                    </button>
+                  </Link>
                 </div>
               ))}
             </div>

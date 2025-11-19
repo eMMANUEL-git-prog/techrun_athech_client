@@ -6,7 +6,7 @@ import { getTranslation } from "@/lib/translations";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Globe } from "lucide-react";
+import { Users, Package, Globe } from "lucide-react";
 
 export function Navbar() {
   const { user, isAuthenticated, signOut } = useAuth();
@@ -26,7 +26,7 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-12">
+        <div className="flex justify-between items-center h-16">
           <Link href="/" className="">
             <img src="/logo.png" alt="" className="h-10" />
           </Link>
@@ -53,6 +53,13 @@ export function Navbar() {
                   >
                     {t("verifications")}
                   </Link>
+                  <Link
+                    href="/dashboard/users"
+                    className="text-foreground hover:text-primary transition-colors flex items-center gap-2"
+                  >
+                    <Users className="w-4 h-4" />
+                    {t("manage")}
+                  </Link>
                 </>
               )}
               {(user?.role === "athlete" || user?.role === "coach") && (
@@ -63,17 +70,24 @@ export function Navbar() {
                   {t("whereabouts")}
                 </Link>
               )}
+              <Link
+                href="/packages"
+                className="text-foreground hover:text-primary transition-colors flex items-center gap-2"
+              >
+                <Package className="w-4 h-4" />
+                {t("premium")}
+              </Link>
             </div>
           )}
 
           <div className="flex items-center gap-4">
             <div className="relative group">
-              <button className="flex flex-row items-center text-foreground text-sm hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-muted">
-                <Globe className="mr-2 h-6" />
+              <button className="flex flex-row gap-2 text-foreground hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-muted">
+                <Globe />
                 {language.toUpperCase()}
               </button>
               <div className="absolute right-0 mt-2 w-32 bg-card border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                {(["en", "es", "fr"] as const).map((lang) => (
+                {(["en", "es", "fr", "sw"] as const).map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang)}
@@ -87,7 +101,9 @@ export function Navbar() {
                       ? "English"
                       : lang === "es"
                       ? "Español"
-                      : "Français"}
+                      : lang === "fr"
+                      ? "Français"
+                      : "Swahili"}
                   </button>
                 ))}
               </div>
@@ -107,6 +123,11 @@ export function Navbar() {
                     <p className="text-sm text-muted-foreground capitalize">
                       {user?.role}
                     </p>
+                    {user?.subscription && user.subscription !== "free" && (
+                      <p className="text-xs text-primary font-semibold mt-1">
+                        {user.subscription.toUpperCase()} PLAN
+                      </p>
+                    )}
                   </div>
                   <button
                     onClick={handleLogout}
@@ -165,6 +186,12 @@ export function Navbar() {
                 >
                   {t("verifications")}
                 </Link>
+                <Link
+                  href="/dashboard/users"
+                  className="block px-0 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  {t("manage")}
+                </Link>
               </>
             )}
             {(user?.role === "athlete" || user?.role === "coach") && (
@@ -175,6 +202,12 @@ export function Navbar() {
                 {t("whereabouts")}
               </Link>
             )}
+            <Link
+              href="/packages"
+              className="block px-0 py-2 text-foreground hover:text-primary transition-colors"
+            >
+              {t("premium")}
+            </Link>
             <button
               onClick={handleLogout}
               className="block w-full text-left px-0 py-2 text-foreground hover:text-primary transition-colors"

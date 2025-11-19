@@ -20,7 +20,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language") as Language | null;
-    if (savedLanguage && ["en", "es", "fr"].includes(savedLanguage)) {
+    if (savedLanguage && ["en", "es", "fr", "sw"].includes(savedLanguage)) {
       setLanguageState(savedLanguage);
     }
     setMounted(true);
@@ -31,12 +31,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("language", lang);
   };
 
-  // ❗ DO NOT render children without provider – causes the error
-  if (!mounted) return null;
-
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>
-      {children}
+      {mounted ? children : null}
     </LanguageContext.Provider>
   );
 };
