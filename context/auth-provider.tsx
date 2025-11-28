@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import type React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { mockUsers, MockUser } from "@/lib/mock-data";
+import { mockUsers } from "@/lib/mock-data";
 import { aiService } from "@/lib/ai-service";
 import { showToast } from "@/lib/toast";
 
@@ -13,6 +14,7 @@ export interface User {
   firstName?: string;
   lastName?: string;
   subscription?: "free" | "pro" | "premium";
+  imageUrl?: string; // Added imageUrl field
 }
 
 interface AuthContextType {
@@ -49,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
               lastName: mockUser.lastName,
               role: mockUser.role,
               subscription: mockUser.subscription,
+              imageUrl: mockUser.imageUrl, // Added imageUrl field
             });
 
             const alerts = aiService.generateLoginAlerts(
@@ -101,6 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         lastName: mockUser.lastName,
         role: mockUser.role,
         subscription: mockUser.subscription,
+        imageUrl: mockUser.imageUrl, // Added imageUrl field
       });
 
       const alerts = aiService.generateLoginAlerts(mockUser.id, mockUser.role);

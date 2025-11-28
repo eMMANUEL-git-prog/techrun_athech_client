@@ -13,12 +13,20 @@ export interface StorageAlert {
 export interface StorageWhereabout {
   id: string;
   userId: string;
+  date: string;
+  timeSlot: string;
+  location: string;
+  address: string;
+  city: string;
+  country: string;
+  activityType: string;
+  notes: string;
   latitude: number;
   longitude: number;
-  address: string;
   submittedAt: number;
   verifiedAt?: number;
   verified: boolean;
+  status: "pending" | "verified" | "flagged";
 }
 
 export interface StorageAthleteRecord {

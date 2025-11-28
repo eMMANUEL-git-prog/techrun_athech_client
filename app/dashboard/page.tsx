@@ -9,8 +9,6 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { DashboardCard } from "@/components/dashboard-card";
 import { AlertList } from "@/components/alert-list";
-import { AIActionModal } from "@/components/ai-action-modal";
-import { NutritionCalculatorForm } from "@/components/nutrition-calculator-form";
 import { CoachDashboardSection } from "@/components/coach-dashboard-section";
 import { MedicDashboardSection } from "@/components/medic-dashboard-section";
 import { NutritionistDashboardSection } from "@/components/nutritionist-dashboard-section";
@@ -19,7 +17,7 @@ import { showToast } from "@/lib/toast";
 import {
   hasFeatureAccess,
   shouldRedirectToPackages,
-  Subscription,
+  type Subscription,
 } from "@/lib/subscription-utils";
 import {
   Activity,
@@ -30,6 +28,7 @@ import {
   AlertCircle,
   Lock,
 } from "lucide-react";
+import { NutritionCalculatorForm } from "@/components/nutrition-calculator-form"; // Import NutritionCalculatorForm
 
 type FeatureKey =
   | "calorieCalculator"
@@ -141,8 +140,8 @@ export default function DashboardPage() {
       return;
     }
 
-    setSelectedAction(actionType);
-    setModalOpen(true);
+    // Navigate to dedicated page
+    router.push(`/ai/${actionType}-calculator`);
   };
 
   if (loading || pageLoading) {
@@ -164,38 +163,45 @@ export default function DashboardPage() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+        <div className="mb-8 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-xl p-6 border border-primary/20">
+          <h1 className="text-4xl font-bold text-foreground mb-2 text-balance">
             {t("welcome")}, {user?.firstName || user?.email?.split("@")[0]}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-lg">
             {t("role")}:{" "}
-            <span className="font-medium capitalize">{user?.role}</span>
+            <span className="font-semibold capitalize text-foreground">
+              {user?.role}
+            </span>
             {subscription !== "free" && (
-              <span className="ml-4 px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-100">
-                {subscription.toUpperCase()}
+              <span className="ml-4 px-3 py-1 rounded-full text-xs font-bold bg-primary text-primary-foreground shadow-sm">
+                {subscription.toUpperCase()} MEMBER
               </span>
             )}
           </p>
         </div>
 
-        {/* Dashboard Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <DashboardCard
-            title={t("totalAlerts")}
-            value={alerts.length}
-            description={t("activeNotifications")}
-          />
-          <DashboardCard
-            title={t("totalAthletes")}
-            value={athletes.length}
-            description={t("registeredAthletes")}
-          />
-          <DashboardCard
-            title={t("pendingSubmissions")}
-            value="0"
-            description={t("awaitingVerification")}
-          />
+          <div className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-2 border-blue-500/20 rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <DashboardCard
+              title={t("totalAlerts")}
+              value={alerts.length}
+              description={t("activeNotifications")}
+            />
+          </div>
+          <div className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-2 border-green-500/20 rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <DashboardCard
+              title={t("totalAthletes")}
+              value={athletes.length}
+              description={t("registeredAthletes")}
+            />
+          </div>
+          <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border-2 border-purple-500/20 rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <DashboardCard
+              title={t("pendingSubmissions")}
+              value="0"
+              description={t("awaitingVerification")}
+            />
+          </div>
         </div>
 
         {/* Athlete Dashboard */}
@@ -275,17 +281,17 @@ export default function DashboardPage() {
                         disabled={!hasAccess}
                         className={`${
                           action.color
-                        } border border-border rounded-lg p-6 hover:border-primary transition-all cursor-pointer group w-full h-full ${
+                        } border border-border rounded-lg p-6 hover:border-primary transition-all cursor-pointer group w-full h-full text-left ${
                           !hasAccess ? "opacity-60" : ""
                         }`}
                       >
                         <div className="mb-4 group-hover:scale-110 transition-transform">
                           {action.icon}
                         </div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2 text-left">
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
                           {action.title}
                         </h3>
-                        <p className="text-muted-foreground text-sm text-left">
+                        <p className="text-muted-foreground text-sm">
                           {action.description}
                         </p>
                       </button>
@@ -306,17 +312,16 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Alerts and Nutrition Calculator */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-card border border-border rounded-lg p-6">
-                <h2 className="text-lg font-bold text-foreground mb-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-card border-2 border-border rounded-xl p-6 shadow-lg">
+                <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+                  <AlertCircle className="w-6 h-6 text-primary" />
                   {t("alertManagement")}
                 </h2>
                 <AlertList alerts={alerts} />
               </div>
 
-              <div>
-                {/* Nutrition Calculator Form */}
+              <div className="bg-card border-2 border-border rounded-xl p-6 shadow-lg">
                 <NutritionCalculatorForm />
               </div>
             </div>
@@ -392,13 +397,6 @@ export default function DashboardPage() {
       </main>
 
       <Footer />
-
-      <AIActionModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        actionType={selectedAction}
-        isPro={subscription === "pro" || subscription === "premium"}
-      />
     </div>
   );
 }
