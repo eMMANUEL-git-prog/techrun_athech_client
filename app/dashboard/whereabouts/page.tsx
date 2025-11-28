@@ -320,7 +320,7 @@ export default function WhereaboutsPage() {
                   }
                   required
                   className="w-full px-4 py-2.5 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                  placeholder="National Training Center"
+                  placeholder="Central Primary"
                 />
               </div>
 
@@ -336,7 +336,7 @@ export default function WhereaboutsPage() {
                   }
                   required
                   className="w-full px-4 py-2.5 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                  placeholder="123 Olympic Boulevard"
+                  placeholder="Eastern Avenue"
                 />
               </div>
 
@@ -353,7 +353,7 @@ export default function WhereaboutsPage() {
                     }
                     required
                     className="w-full px-4 py-2.5 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                    placeholder="Los Angeles"
+                    placeholder="Eldoret"
                   />
                 </div>
 
@@ -369,7 +369,7 @@ export default function WhereaboutsPage() {
                     }
                     required
                     className="w-full px-4 py-2.5 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                    placeholder="USA"
+                    placeholder="Kenya"
                   />
                 </div>
               </div>
