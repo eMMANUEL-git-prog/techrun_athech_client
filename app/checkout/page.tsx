@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { useAuth } from "@/context/auth-provider";
 import { useLanguage } from "@/context/language-provider";
 import { getTranslation } from "@/lib/translations";
@@ -9,7 +11,8 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { subscriptionPlans } from "@/lib/subscription-plans";
 import { showToast } from "@/lib/toast";
-import { Loader, Check } from "lucide-react";
+import { Loader, Check, Smartphone } from "lucide-react";
+import { api } from "@/lib/api";
 
 type PaymentMethod = "mpesa" | "card" | "paypal";
 
@@ -26,7 +29,11 @@ export default function CheckoutPage() {
   const [pageLoading, setPageLoading] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("card");
   const [processing, setProcessing] = useState(false);
+  const [waitingForMpesa, setWaitingForMpesa] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(
+    null
+  );
   const [formData, setFormData] = useState({
     cardNumber: "",
     expiry: "",
@@ -51,21 +58,118 @@ export default function CheckoutPage() {
     }
   }, [plan, router]);
 
+  useEffect(() => {
+    if (!checkoutRequestId || !waitingForMpesa) return;
+
+    const pollPaymentStatus = async () => {
+      try {
+        const response = await api.payments.getTransactions();
+        const transaction = response.data.transactions.find(
+          (t: any) => t.checkout_request_id === checkoutRequestId
+        );
+
+        if (transaction) {
+          if (transaction.status === "completed") {
+            setWaitingForMpesa(false);
+            setPaymentSuccess(true);
+            showToast("Payment successful! Subscription activated.", "success");
+
+            // Redirect after success
+            setTimeout(() => {
+              router.push("/dashboard");
+            }, 2000);
+          } else if (transaction.status === "failed") {
+            setWaitingForMpesa(false);
+            setProcessing(false);
+            showToast("Payment failed. Please try again.", "error");
+          }
+        }
+      } catch (error) {
+        console.error("Error polling payment status:", error);
+      }
+    };
+
+    // Poll every 3 seconds
+    const interval = setInterval(pollPaymentStatus, 3000);
+
+    // Stop polling after 2 minutes
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+      if (waitingForMpesa) {
+        setWaitingForMpesa(false);
+        setProcessing(false);
+        showToast(
+          "Payment timeout. Please check your phone and try again.",
+          "error"
+        );
+      }
+    }, 120000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [checkoutRequestId, waitingForMpesa, router]);
+
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setProcessing(true);
 
-    // Simulate payment processing
-    setTimeout(() => {
-      setProcessing(false);
-      setPaymentSuccess(true);
-      showToast("Payment successful! Subscription activated.", "success");
+    try {
+      if (selectedPayment === "mpesa") {
+        // Validate phone number format
+        const phoneNumber = formData.phoneNumber.replace(/\s/g, "");
+        if (!phoneNumber.match(/^(\+?254|0)[17]\d{8}$/)) {
+          showToast(
+            "Invalid phone number. Use format: 254712345678 or 0712345678",
+            "error"
+          );
+          setProcessing(false);
+          return;
+        }
 
-      // Redirect after success
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
-    }, 2000);
+        // Format phone number to 254XXXXXXXXX
+        const formattedPhone = phoneNumber.startsWith("+")
+          ? phoneNumber.substring(1)
+          : phoneNumber.startsWith("0")
+          ? "254" + phoneNumber.substring(1)
+          : phoneNumber;
+
+        // Initiate STK push
+        const response = await api.payments.initiateMpesa({
+          phone_number: formattedPhone,
+          amount: Math.round(total),
+          package_type: plan?.tier || "pro",
+        });
+
+        if (response.data.checkout_request_id) {
+          setCheckoutRequestId(response.data.checkout_request_id);
+          setWaitingForMpesa(true);
+          showToast(
+            "STK push sent! Please check your phone and enter your M-Pesa PIN.",
+            "success"
+          );
+        }
+      } else {
+        setTimeout(() => {
+          setProcessing(false);
+          setPaymentSuccess(true);
+          showToast("Payment successful! Subscription activated.", "success");
+
+          // Redirect after success
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 2000);
+        }, 2000);
+      }
+    } catch (error: any) {
+      console.error("Payment error:", error);
+      showToast(
+        error.response?.data?.error || "Payment failed. Please try again.",
+        "error"
+      );
+      setProcessing(false);
+    }
   };
 
   if (pageLoading) {
@@ -90,6 +194,27 @@ export default function CheckoutPage() {
         <h1 className="text-3xl font-bold text-foreground mb-8">
           {t("confirmSubscription")}
         </h1>
+
+        {waitingForMpesa && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+            <div className="bg-card border border-border rounded-lg p-8 text-center max-w-md">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-950 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Smartphone className="w-8 h-8 text-green-600 dark:text-green-400 animate-pulse" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground mb-2">
+                Check Your Phone
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                An M-Pesa payment prompt has been sent to your phone. Please
+                enter your PIN to complete the payment.
+              </p>
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Loader className="w-4 h-4 animate-spin" />
+                Waiting for payment confirmation...
+              </div>
+            </div>
+          </div>
+        )}
 
         {paymentSuccess && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
@@ -203,7 +328,7 @@ export default function CheckoutPage() {
                     </label>
                     <input
                       type="tel"
-                      placeholder="+254 712 345 678"
+                      placeholder="254712345678 or 0712345678"
                       value={formData.phoneNumber}
                       onChange={(e) =>
                         setFormData({
@@ -214,6 +339,10 @@ export default function CheckoutPage() {
                       className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:border-primary"
                       required
                     />
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Enter your Safaricom M-Pesa number. You'll receive an STK
+                      push prompt on your phone.
+                    </p>
                   </div>
                 )}
 
@@ -228,13 +357,15 @@ export default function CheckoutPage() {
 
                 <button
                   type="submit"
-                  disabled={processing}
+                  disabled={processing || waitingForMpesa}
                   className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {processing ? (
+                  {processing || waitingForMpesa ? (
                     <>
                       <Loader className="w-5 h-5 animate-spin" />
-                      {t("processingPayment")}
+                      {waitingForMpesa
+                        ? "Waiting for M-Pesa..."
+                        : t("processingPayment")}
                     </>
                   ) : (
                     t("completePayment")
