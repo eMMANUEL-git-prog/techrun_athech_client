@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://techrun-backend.onrender.com/api";
 
 let axiosInstance: AxiosInstance | null = null;
 
