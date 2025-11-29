@@ -8,7 +8,8 @@ interface Alert {
   message: string;
   type: "info" | "warning" | "error" | "success";
   severity?: "low" | "medium" | "high";
-  createdAt: string | number;
+  createdAt?: string | number;
+  created_at?: string | number;
   read?: boolean;
 }
 
@@ -75,6 +76,10 @@ export function AlertList({ alerts, onMarkAsRead }: AlertListProps) {
       ) : (
         alerts.map((alert) => {
           const styles = getAlertStyles(alert.type, alert.severity);
+
+          // SAFE TIMESTAMP: support both createdAt and created_at
+          const created = alert.createdAt || alert.created_at;
+
           return (
             <div
               key={alert.id}
@@ -89,10 +94,18 @@ export function AlertList({ alerts, onMarkAsRead }: AlertListProps) {
                   <p className={`font-semibold mb-1 ${styles.text}`}>
                     {alert.message}
                   </p>
+
                   <div className="flex items-center gap-2 text-xs opacity-75">
-                    <span>{formatTime(alert.createdAt.toString())}</span>
-                    <span>•</span>
-                    <span>{formatDate(alert.createdAt.toString())}</span>
+                    {created ? (
+                      <>
+                        <span>{formatTime(created)}</span>
+                        <span>•</span>
+                        <span>{formatDate(created)}</span>
+                      </>
+                    ) : (
+                      <span>—</span>
+                    )}
+
                     {!alert.read && (
                       <>
                         <span>•</span>

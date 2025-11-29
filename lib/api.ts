@@ -110,4 +110,57 @@ export const api = {
         subscription_tier,
       }),
   },
+
+  athletes: {
+    getAll: () => getAxiosInstance().get("/athletes"),
+    getById: (id: string) => getAxiosInstance().get(`/athletes/${id}`),
+  },
+
+  biomechanics: {
+    getAll: () => getAxiosInstance().get("/biomechanics"),
+    getById: (id: string) => getAxiosInstance().get(`/biomechanics/${id}`),
+    create: (data: any) => getAxiosInstance().post("/biomechanics", data),
+  },
+
+  trainingLoad: {
+    getAll: () => getAxiosInstance().get("/training-load"),
+    getByWeek: (date: string) =>
+      getAxiosInstance().get(`/training-load/week/${date}`),
+    createOrUpdate: (data: any) =>
+      getAxiosInstance().post("/training-load", data),
+  },
+
+  injury: {
+    getAll: () => getAxiosInstance().get("/injury"),
+    getLatest: () => getAxiosInstance().get("/injury/latest"),
+    create: (data: any) => getAxiosInstance().post("/injury", data),
+    review: (id: string, data: { status: string; notes?: string }) =>
+      getAxiosInstance().put(`/injury/${id}/review`, data),
+  },
+
+  equipment: {
+    getAll: () => getAxiosInstance().get("/equipment"),
+    getActive: () => getAxiosInstance().get("/equipment/active"),
+    create: (data: any) => getAxiosInstance().post("/equipment", data),
+    updateUsage: (
+      id: string,
+      data: { distance_km?: number; uses_increment?: number }
+    ) => getAxiosInstance().put(`/equipment/${id}/usage`, data),
+    updateCondition: (id: string, data: any) =>
+      getAxiosInstance().put(`/equipment/${id}/condition`, data),
+    retire: (id: string) => getAxiosInstance().put(`/equipment/${id}/retire`),
+    delete: (id: string) => getAxiosInstance().delete(`/equipment/${id}`),
+  },
+
+  performance: {
+    getAll: () => getAxiosInstance().get("/performance"),
+    getLatest: () => getAxiosInstance().get("/performance/latest"),
+    create: (data: any) => getAxiosInstance().post("/performance", data),
+  },
+
+  behavioral: {
+    getAll: () => getAxiosInstance().get("/behavioral"),
+    getLatest: () => getAxiosInstance().get("/behavioral/latest"),
+    create: (data: any) => getAxiosInstance().post("/behavioral", data),
+  },
 };

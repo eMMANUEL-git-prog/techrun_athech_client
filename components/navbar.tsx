@@ -6,7 +6,7 @@ import { getTranslation } from "@/lib/translations";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Users, Package, Settings } from "lucide-react";
+import { Users, Package, Settings, Activity } from "lucide-react";
 import { NotificationDropdown } from "@/components/notification-dropdown";
 
 export function Navbar() {
@@ -43,6 +43,61 @@ export function Navbar() {
               >
                 {t("dashboard")}
               </Link>
+
+              {user?.role === "athlete" && (
+                <div className="relative group">
+                  <button className="text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
+                    <Activity className="w-4 h-4" />
+                    Sports Science
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                  <div className="absolute left-0 mt-2 w-56 bg-card border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                    <Link
+                      href="/dashboard/biomechanics"
+                      className="block px-4 py-2 hover:bg-muted transition-colors first:rounded-t-lg text-foreground"
+                    >
+                      Biomechanics Analysis
+                    </Link>
+                    <Link
+                      href="/dashboard/training-load"
+                      className="block px-4 py-2 hover:bg-muted transition-colors text-foreground"
+                    >
+                      Training Load
+                    </Link>
+                    <Link
+                      href="/dashboard/equipment"
+                      className="block px-4 py-2 hover:bg-muted transition-colors text-foreground"
+                    >
+                      Equipment Tracking
+                    </Link>
+                    <Link
+                      href="/dashboard/performance"
+                      className="block px-4 py-2 hover:bg-muted transition-colors text-foreground"
+                    >
+                      Performance Optimization
+                    </Link>
+                    <Link
+                      href="/dashboard/insights"
+                      className="block px-4 py-2 hover:bg-muted transition-colors last:rounded-b-lg text-foreground"
+                    >
+                      Behavioral Insights
+                    </Link>
+                  </div>
+                </div>
+              )}
+
               {user?.role === "admin" && (
                 <>
                   <Link
@@ -72,6 +127,14 @@ export function Navbar() {
                   className="text-foreground hover:text-primary transition-colors font-medium"
                 >
                   {t("whereabouts")}
+                </Link>
+              )}
+              {user?.role === "athlete" && (
+                <Link
+                  href="/dashboard/alerts"
+                  className="text-foreground hover:text-primary transition-colors font-medium"
+                >
+                  Alerts
                 </Link>
               )}
               <Link
@@ -195,6 +258,45 @@ export function Navbar() {
             >
               {t("dashboard")}
             </Link>
+
+            {user?.role === "athlete" && (
+              <>
+                <div className="py-2 text-muted-foreground text-sm font-semibold">
+                  Sports Science
+                </div>
+                <Link
+                  href="/dashboard/biomechanics"
+                  className="block px-4 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  Biomechanics
+                </Link>
+                <Link
+                  href="/dashboard/training-load"
+                  className="block px-4 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  Training Load
+                </Link>
+                <Link
+                  href="/dashboard/equipment"
+                  className="block px-4 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  Equipment
+                </Link>
+                <Link
+                  href="/dashboard/performance"
+                  className="block px-4 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  Performance
+                </Link>
+                <Link
+                  href="/dashboard/insights"
+                  className="block px-4 py-2 text-foreground hover:text-primary transition-colors"
+                >
+                  Insights
+                </Link>
+              </>
+            )}
+
             {user?.role === "admin" && (
               <>
                 <Link
@@ -223,6 +325,14 @@ export function Navbar() {
                 className="block px-0 py-2 text-foreground hover:text-primary transition-colors font-medium"
               >
                 {t("whereabouts")}
+              </Link>
+            )}
+            {user?.role === "athlete" && (
+              <Link
+                href="/dashboard/alerts"
+                className="block px-0 py-2 text-foreground hover:text-primary transition-colors font-medium"
+              >
+                Alerts
               </Link>
             )}
             <Link

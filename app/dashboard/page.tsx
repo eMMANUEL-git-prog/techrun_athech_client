@@ -12,7 +12,7 @@ import { AlertList } from "@/components/alert-list";
 import { CoachDashboardSection } from "@/components/coach-dashboard-section";
 import { MedicDashboardSection } from "@/components/medic-dashboard-section";
 import { NutritionistDashboardSection } from "@/components/nutritionist-dashboard-section";
-import { mockStorage } from "@/lib/mock-storage";
+import { api } from "@/lib/api";
 import { showToast } from "@/lib/toast";
 import {
   hasFeatureAccess,
@@ -27,7 +27,11 @@ import {
   TrendingUp,
   AlertCircle,
   Lock,
+  BarChart3,
+  Footprints,
+  Package2,
 } from "lucide-react";
+import Link from "next/link";
 import { NutritionCalculatorForm } from "@/components/nutrition-calculator-form"; // Import NutritionCalculatorForm
 
 type FeatureKey =
@@ -68,33 +72,12 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const storedAlerts = mockStorage.getAlerts(user?.id);
-        setAlerts(storedAlerts);
+        const alertsResponse = await api.alerts.getAll();
+        setAlerts(alertsResponse.data.alerts || []);
 
-        // Mock athletes data
-        const storedAthletes = mockStorage.getAthletes();
-        if (storedAthletes.length === 0) {
-          mockStorage.addAthlete({
-            name: "John Athlete",
-            age: 25,
-            weight: 70,
-            height: 175,
-            sport: "Running",
-            level: "Professional",
-            subscriptionTier: "free",
-          });
-          mockStorage.addAthlete({
-            name: "Jane Pro",
-            age: 28,
-            weight: 65,
-            height: 172,
-            sport: "Swimming",
-            level: "Olympic",
-            subscriptionTier: "pro",
-          });
-          setAthletes(mockStorage.getAthletes());
-        } else {
-          setAthletes(storedAthletes);
+        if (user?.role === "admin" || user?.role === "coach") {
+          const athletesResponse = await api.athletes.getAll();
+          setAthletes(athletesResponse.data.athletes || []);
         }
       } catch (error) {
         console.error("Error loading dashboard data:", error);
@@ -107,7 +90,7 @@ export default function DashboardPage() {
     if (isAuthenticated && !loading) {
       loadData();
     }
-  }, [isAuthenticated, loading, user?.id]);
+  }, [isAuthenticated, loading, user?.id, user?.role]);
 
   const handleActionClick = (
     actionType:
@@ -207,6 +190,74 @@ export default function DashboardPage() {
         {/* Athlete Dashboard */}
         {user?.role === "athlete" && (
           <div className="space-y-8">
+            {/* Sports Science Features */}
+            <div>
+              <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Footprints className="w-7 h-7 text-primary" />
+                Sports Science Features
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+                <Link
+                  href="/dashboard/biomechanics"
+                  className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-lg p-4 hover:shadow-lg hover:scale-105 transition-all cursor-pointer group"
+                >
+                  <Footprints className="w-8 h-8 text-blue-500 mb-2 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold text-foreground">
+                    Biomechanics
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Gait & form analysis
+                  </p>
+                </Link>
+
+                <Link
+                  href="/dashboard/training-load"
+                  className="bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20 rounded-lg p-4 hover:shadow-lg hover:scale-105 transition-all cursor-pointer group"
+                >
+                  <BarChart3 className="w-8 h-8 text-orange-500 mb-2 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold text-foreground">
+                    Training Load
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Monitor intensity
+                  </p>
+                </Link>
+
+                <Link
+                  href="/dashboard/equipment"
+                  className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-lg p-4 hover:shadow-lg hover:scale-105 transition-all cursor-pointer group"
+                >
+                  <Package2 className="w-8 h-8 text-purple-500 mb-2 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold text-foreground">Equipment</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Track gear usage
+                  </p>
+                </Link>
+
+                <Link
+                  href="/dashboard/performance"
+                  className="bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 rounded-lg p-4 hover:shadow-lg hover:scale-105 transition-all cursor-pointer group"
+                >
+                  <TrendingUp className="w-8 h-8 text-green-500 mb-2 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold text-foreground">Performance</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    AI optimization
+                  </p>
+                </Link>
+
+                <Link
+                  href="/dashboard/insights"
+                  className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/20 rounded-lg p-4 hover:shadow-lg hover:scale-105 transition-all cursor-pointer group"
+                >
+                  <Activity className="w-8 h-8 text-pink-500 mb-2 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold text-foreground">Insights</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Mental wellness
+                  </p>
+                </Link>
+              </div>
+            </div>
+
             {/* AI Actions */}
             <div>
               <h2 className="text-2xl font-bold text-foreground mb-6">
@@ -321,7 +372,7 @@ export default function DashboardPage() {
                 <AlertList alerts={alerts} />
               </div>
 
-              <div className="bg-card border-2 border-border rounded-xl p-6 shadow-lg">
+              <div className="bg-card border border-border rounded-lg p-6">
                 <NutritionCalculatorForm />
               </div>
             </div>
