@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Users, CheckCircle, Bell, TrendingUp, Shield } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import EnhancedHeroSection from "@/components/enhanced-hero-section";
 
 export default function LandingPage() {
   const { isAuthenticated, loading } = useAuth();
@@ -76,47 +77,8 @@ export default function LandingPage() {
       )}
 
       {/* Hero Section */}
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col justify-center w-full">
-        <div className="relative w-full min-h-[70vh] flex items-center justify-center overflow-hidden rounded-2xl">
-          {/* Background slideshow */}
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-            style={{ backgroundImage: `url(${images[index]})` }}
-          />
-
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-none" />
-
-          {/* Content */}
-          <div className="relative text-center px-4 py-20">
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              {t("athleteManagement")}{" "}
-              <span className="text-primary">{t("simplified")}</span>
-            </h2>
-
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto mb-8 leading-relaxed">
-              {t("trackWhereaboue")}
-            </p>
-
-            {!isAuthenticated && (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/signup"
-                  className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
-                >
-                  {t("startFreeTrial")}
-                </Link>
-
-                <Link
-                  href="/login"
-                  className="px-8 py-3 border border-white/40 text-white rounded-lg font-medium hover:bg-white/10 transition-colors"
-                >
-                  {t("signIn")}
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
+      <main className="flex-1 mx-auto px-2 sm:px-6 lg:px-8 py-4 flex flex-col justify-center w-full">
+        <EnhancedHeroSection />
 
         <div className="grid md:grid-cols-3 gap-8 mt-16">
           {[
@@ -196,7 +158,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <section className="py-16">
+        {/* <section className="py-16">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Trusted By Leading Partners
@@ -218,7 +180,7 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {!isAuthenticated && (
           <div className="mt-20">
