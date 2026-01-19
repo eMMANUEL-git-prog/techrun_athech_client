@@ -17,11 +17,11 @@ const alertMessages = {
       message: "AI detected improvement in your endurance metrics",
       severity: "low" as const,
     },
-    {
-      type: "compliance" as const,
-      message: "Anti-doping test scheduled for tomorrow",
-      severity: "high" as const,
-    },
+    // {
+    //   type: "compliance" as const,
+    //   message: "Anti-doping test scheduled for tomorrow",
+    //   severity: "high" as const,
+    // },
   ],
   coach: [
     {
@@ -69,7 +69,7 @@ const alertMessages = {
 export const aiService = {
   generateLoginAlerts: (
     userId: string,
-    userRole: "athlete" | "coach" | "medic" | "nutritionist" | "admin"
+    userRole: "athlete" | "coach" | "medic" | "nutritionist" | "admin",
   ) => {
     const roleAlerts =
       alertMessages[userRole as keyof typeof alertMessages] || [];
@@ -90,7 +90,7 @@ export const aiService = {
         severity: alert.severity,
         message: alert.message,
         read: false,
-      })
+      }),
     );
   },
 
@@ -99,7 +99,7 @@ export const aiService = {
     weight: number,
     height: number,
     gender: "male" | "female",
-    activityLevel: "sedentary" | "light" | "moderate" | "active" | "veryActive"
+    activityLevel: "sedentary" | "light" | "moderate" | "active" | "veryActive",
   ) => {
     // Harris-Benedict equation for BMR
     let bmr: number;
@@ -134,7 +134,7 @@ export const aiService = {
     return {
       trend: Math.random() > 0.5 ? "improving" : "stable",
       nextWeekPrediction: Math.round(
-        currentMetrics.current * (0.95 + Math.random() * 0.1)
+        currentMetrics.current * (0.95 + Math.random() * 0.1),
       ),
       recommendations: [
         "Increase training intensity by 10%",
@@ -160,11 +160,11 @@ export const aiService = {
           const potentialInteractions = commonInteractions[medLower] || [];
           if (
             potentialInteractions.some((i) =>
-              otherMed.toLowerCase().includes(i)
+              otherMed.toLowerCase().includes(i),
             )
           ) {
             interactions.push(
-              `Possible interaction between ${med} and ${otherMed}`
+              `Possible interaction between ${med} and ${otherMed}`,
             );
           }
         }
@@ -177,7 +177,7 @@ export const aiService = {
 
 function generateNutritionRecommendations(
   age: number,
-  activityLevel: string
+  activityLevel: string,
 ): string[] {
   const recommendations = [
     "Drink at least 3-4 liters of water daily",
